@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,7 +19,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.codecraftshop.openshift.mysql.model.College;
 import com.codecraftshop.openshift.mysql.model.Student;
+import com.codecraftshop.openshift.mysql.repository.CollegeRepository;
 import com.codecraftshop.openshift.mysql.repository.StudentRepository;
 
 @RestController
@@ -28,9 +31,11 @@ public class StudentController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(StudentController.class);
 
 	private final StudentRepository studentRepository;
+	private final CollegeRepository collegeRepository;
 
-	public StudentController(StudentRepository studentRepository) {
+	public StudentController(StudentRepository studentRepository, CollegeRepository collegeRepository) {
 		this.studentRepository = studentRepository;
+		this.collegeRepository = collegeRepository;
 	}
 
 	@GetMapping
@@ -42,8 +47,20 @@ public class StudentController {
 	}
 
 	@PostMapping
+	@Transactional
 	public ResponseEntity<Student> addStudent(@RequestBody Student student) {
 		LOGGER.info("Creating student");
+		if (student.getCollege() == null) {
+			LOGGER.debug("Student was not created because college details are missing");
+			return ResponseEntity.badRequest().build();
+		}
+		Optional<College> college = findOrCreateCollege(student.getCollege());
+		if (!college.isPresent()) {
+			LOGGER.debug("Student was not created because college id {} was not found",
+					student.getCollege().getId());
+			return ResponseEntity.notFound().build();
+		}
+		student.setCollege(college.get());
 		Student savedStudent = studentRepository.save(student);
 		LOGGER.debug("Created student with id {}", savedStudent.getId());
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -63,6 +80,7 @@ public class StudentController {
 	}
 
 	@PutMapping("/{id}")
+	@Transactional
 	public ResponseEntity<Student> updateStudent(@PathVariable Long id, @RequestBody Student student) {
 		LOGGER.info("Updating student with id {}", id);
 		if (!studentRepository.existsById(id)) {
@@ -74,11 +92,29 @@ public class StudentController {
 					id, student.getAge());
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
 		}
+		if (student.getCollege() == null) {
+			LOGGER.debug("Student with id {} was not updated because college details are missing", id);
+			return ResponseEntity.badRequest().build();
+		}
+		Optional<College> college = findOrCreateCollege(student.getCollege());
+		if (!college.isPresent()) {
+			LOGGER.debug("Student with id {} was not updated because college id {} was not found",
+					id, student.getCollege().getId());
+			return ResponseEntity.notFound().build();
+		}
 
 		student.setId(id);
+		student.setCollege(college.get());
 		Student updatedStudent = studentRepository.save(student);
 		LOGGER.debug("Updated student with id {}", id);
 		return ResponseEntity.ok(updatedStudent);
+	}
+
+	private Optional<College> findOrCreateCollege(College college) {
+		if (college.getId() == null) {
+			return Optional.of(collegeRepository.save(college));
+		}
+		return collegeRepository.findById(college.getId());
 	}
 
 	@DeleteMapping("/{id}")
