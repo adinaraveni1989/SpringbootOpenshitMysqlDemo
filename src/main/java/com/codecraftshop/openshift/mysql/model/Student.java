@@ -18,6 +18,8 @@ public class Student {
 	
 	private String address;
 
+	private int age;
+
 	public Long getId() {
 		return id;
 	}
@@ -42,16 +44,29 @@ public class Student {
 		this.address = address;
 	}
 
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
 	public Student() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
 	public Student(Long id, String name, String address) {
+		this(id, name, address, 0);
+	}
+
+	public Student(Long id, String name, String address, int age) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.address = address;
+		this.age = age;
 	}
 	
 	

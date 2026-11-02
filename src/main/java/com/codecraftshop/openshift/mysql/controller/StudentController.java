@@ -6,11 +6,13 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -58,6 +60,25 @@ public class StudentController {
 		LOGGER.debug("Student with id {} {}", id, student.isPresent() ? "was found" : "was not found");
 		return student.map(ResponseEntity::ok)
 				.orElseGet(() -> ResponseEntity.notFound().build());
+	}
+
+	@PutMapping("/{id}")
+	public ResponseEntity<Student> updateStudent(@PathVariable Long id, @RequestBody Student student) {
+		LOGGER.info("Updating student with id {}", id);
+		if (!studentRepository.existsById(id)) {
+			LOGGER.debug("Student with id {} was not found for update", id);
+			return ResponseEntity.notFound().build();
+		}
+		if (student.getAge() <= 18) {
+			LOGGER.debug("Student with id {} was not updated because age {} is not greater than 18",
+					id, student.getAge());
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+		}
+
+		student.setId(id);
+		Student updatedStudent = studentRepository.save(student);
+		LOGGER.debug("Updated student with id {}", id);
+		return ResponseEntity.ok(updatedStudent);
 	}
 
 	@DeleteMapping("/{id}")
