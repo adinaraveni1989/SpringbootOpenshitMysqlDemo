@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Gates College Student Portal | Test Results</title>
+    <style>
+        body { max-width: 1080px; margin: 40px auto; padding: 0 24px; color: #17283e; font: 15px/1.6 "Segoe UI", Arial, sans-serif; }
+        h1, h2 { color: #14365d; }
+        h1 { margin-bottom: 4px; font-family: Georgia, "Times New Roman", serif; font-size: 34px; }
+        .subtitle { margin-top: 0; color: #627187; }
+        .summary { margin: 22px 0; padding: 16px 20px; background: #eaf6ef; border-left: 4px solid #24815a; border-radius: 6px; }
+        .summary strong { color: #176b49; }
+        table { width: 100%; margin: 18px 0 34px; border-collapse: collapse; }
+        th, td { padding: 11px 12px; border: 1px solid #dce5ef; text-align: left; vertical-align: top; }
+        th { color: #14365d; background: #f0f5fa; }
+        code { padding: 2px 5px; background: #f1f4f8; border-radius: 3px; }
+        .pass { color: #176b49; font-weight: 700; }
+        figure { margin: 22px 0 30px; padding: 14px; border: 1px solid #dce5ef; border-radius: 8px; }
+        figure img { display: block; width: min(100%, 1000px); height: auto; margin: 0 auto; border: 1px solid #e1e7ef; }
+        figcaption { margin-top: 9px; color: #526379; font-weight: 600; }
+        footer { margin: 42px 0 24px; color: #627187; font-size: 13px; }
+    </style>
+</head>
+<body>
+<h1>Gates College Student Portal</h1>
+<p class="subtitle">UI and endpoint test results · 2 November 2026</p>
+
+<div class="summary"><strong>PASS</strong> — The requested welcome, create, fetch, update, and cancel flows were exercised in Microsoft Edge against the local Spring Boot application. No browser JavaScript errors were observed.</div>
+
+<h2>Automated tests</h2>
+<table>
+    <thead><tr><th>Test suite</th><th>Passed</th><th>Failed</th><th>Result</th></tr></thead>
+    <tbody>
+    <tr><td>StudentControllerTests</td><td>13</td><td>0</td><td class="pass">PASS</td></tr>
+    <tr><td>StudentCollegeRelationshipTests</td><td>1</td><td>0</td><td class="pass">PASS</td></tr>
+    <tr><td>SpringbootOpenshitMysqlDemoApplicationTests</td><td>1</td><td>0</td><td class="pass">PASS</td></tr>
+    <tr><th>Total</th><th>15</th><th>0</th><th class="pass">PASS</th></tr>
+    </tbody>
+</table>
+
+<h2>Browser scenarios</h2>
+<table>
+    <thead><tr><th>Scenario</th><th>Request / result</th><th>Status</th><th>Result</th></tr></thead>
+    <tbody>
+    <tr><td>Welcome page and create action</td><td>Page renders welcome message and actions</td><td>HTTP 200</td><td class="pass">PASS</td></tr>
+    <tr><td>Open create-student form</td><td>Create button opens student and college fields with Submit and Cancel actions</td><td>Page navigation</td><td class="pass">PASS</td></tr>
+    <tr><td>Create student</td><td><code>POST /students</code> — student created with Gates College (student ID 2, college ID 1)</td><td>HTTP 201</td><td class="pass">PASS</td></tr>
+    <tr><td>Fetch student by ID</td><td><code>GET /students/2</code> — student and college details displayed</td><td>HTTP 200</td><td class="pass">PASS</td></tr>
+    <tr><td>Open update form by ID</td><td><code>GET /students/2</code> — existing student and college populate the form</td><td>HTTP 200</td><td class="pass">PASS</td></tr>
+    <tr><td>Reject age 18 update</td><td>Form displays the over-18 requirement and does not send an update</td><td>Client validation</td><td class="pass">PASS</td></tr>
+    <tr><td>Update student over age 18</td><td><code>PUT /students/2</code> — updated name/address; college association retained</td><td>HTTP 200</td><td class="pass">PASS</td></tr>
+    <tr><td>Cancel create form</td><td>Cancel returns to the welcome page</td><td>Page navigation</td><td class="pass">PASS</td></tr>
+    </tbody>
+</table>
+
+<h2>Captured screenshots</h2>
+<figure><img src="test-results/screenshots/01-welcome.png" alt="Gates College welcome page with create, fetch, and update actions"><figcaption>1. Welcome page with student create, fetch, and update actions</figcaption></figure>
+<figure><img src="test-results/screenshots/02-create-student-form.png" alt="Create student form with student and college details"><figcaption>2. Create student form, including student and college details plus Submit and Cancel</figcaption></figure>
+<figure><img src="test-results/screenshots/03-student-created.png" alt="Successful student creation and response details"><figcaption>3. Successful student creation and returned student/college details</figcaption></figure>
+<figure><img src="test-results/screenshots/04-fetch-student.png" alt="Fetched student details on the welcome page"><figcaption>4. Student details fetched by ID</figcaption></figure>
+<figure><img src="test-results/screenshots/05-update-student-form.png" alt="Update form prefilled with student and college details"><figcaption>5. Update form opened by student ID and populated from the saved record</figcaption></figure>
+<figure><img src="test-results/screenshots/06-update-rejected-age.png" alt="Update rejected because student age is not greater than 18"><figcaption>6. Update prevented for age 18</figcaption></figure>
+<figure><img src="test-results/screenshots/07-student-updated.png" alt="Successful update response showing the changed student details"><figcaption>7. Successful update response; college relationship remains attached</figcaption></figure>
+<figure><img src="test-results/screenshots/08-cancel-return.png" alt="Welcome page after cancelling the create form"><figcaption>8. Cancel action returns to the welcome page</figcaption></figure>
+
+<footer>Local test database: in-memory H2. Screenshots are saved beside this report in <code>test-results/screenshots</code>.</footer>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Student details | Gates College</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/app.js" defer></script>
+</head>
+<body data-page="student-form">
+<header class="site-header">
+    <a class="brand" href="/">Gates College</a>
+    <span class="header-label">STUDENT PORTAL</span>
+</header>
+<main class="page-shell form-shell">
+    <a class="back-link" href="/">← Back to welcome page</a>
+    <section class="form-card">
+        <p class="eyebrow">STUDENT SERVICES</p>
+        <h1 id="form-title">Create student</h1>
+        <p id="form-description" class="intro">Enter the student and college details below.</p>
+        <div id="form-message" class="message" aria-live="polite" hidden></div>
+        <section id="saved-student-result" class="result-panel" aria-live="polite" hidden></section>
+        <form id="student-form">
+            <fieldset>
+                <legend>Student details</legend>
+                <div class="form-grid">
+                    <div class="field">
+                        <label for="student-name">Full name</label>
+                        <input id="student-name" name="name" type="text" autocomplete="name" required>
+                    </div>
+                    <div class="field">
+                        <label for="student-age">Age</label>
+                        <input id="student-age" name="age" type="number" min="0" max="150" required>
+                        <small id="age-hint">Enter the student's age.</small>
+                    </div>
+                    <div class="field field-wide">
+                        <label for="student-address">Address</label>
+                        <input id="student-address" name="address" type="text" autocomplete="street-address" required>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>College details</legend>
+                <div class="form-grid">
+                    <div class="field">
+                        <label for="college-name">College name</label>
+                        <input id="college-name" name="collegeName" type="text" value="Gates College" required>
+                    </div>
+                    <div class="field">
+                        <label for="college-address">College address</label>
+                        <input id="college-address" name="collegeAddress" type="text" required>
+                    </div>
+                </div>
+            </fieldset>
+            <div class="form-actions">
+                <a class="button button-quiet" href="/">Cancel</a>
+                <button id="submit-button" class="button button-primary" type="submit">Create student</button>
+            </div>
+        </form>
+    </section>
+</main>
+<footer class="site-footer">Gates College <span>·</span> Student Services</footer>
+</body>
+</html>

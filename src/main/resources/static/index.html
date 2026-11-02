@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Gates College | Student Portal</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/app.js" defer></script>
+</head>
+<body data-page="home">
+<header class="site-header">
+    <a class="brand" href="/">Gates College</a>
+    <span class="header-label">STUDENT PORTAL</span>
+</header>
+<main class="page-shell">
+    <section class="welcome-card">
+        <p class="eyebrow">YOUR COLLEGE, YOUR FUTURE</p>
+        <h1>Welcome to Gates College</h1>
+        <p class="intro">Manage student records with a few simple steps.</p>
+        <a class="button button-primary" href="/student-form.html?mode=create">Create student</a>
+    </section>
+
+    <section class="actions-grid" aria-label="Student actions">
+        <article class="action-card">
+            <div class="action-icon" aria-hidden="true">01</div>
+            <h2>Find a student</h2>
+            <p>Enter a student ID to view their record and college details.</p>
+            <form id="fetch-form" class="inline-form">
+                <label for="fetch-id">Student ID</label>
+                <div class="input-action">
+                    <input id="fetch-id" name="id" type="number" min="1" placeholder="e.g. 12" required>
+                    <button class="button button-secondary" type="submit">Fetch details</button>
+                </div>
+            </form>
+        </article>
+        <article class="action-card">
+            <div class="action-icon" aria-hidden="true">02</div>
+            <h2>Update a student</h2>
+            <p>Open a student record to edit. Updates are available to students over 18.</p>
+            <form id="update-form" class="inline-form">
+                <label for="update-id">Student ID</label>
+                <div class="input-action">
+                    <input id="update-id" name="id" type="number" min="1" placeholder="e.g. 12" required>
+                    <button class="button button-secondary" type="submit">Open update form</button>
+                </div>
+            </form>
+        </article>
+    </section>
+    <section id="student-result" class="result-panel" aria-live="polite" hidden></section>
+</main>
+<footer class="site-footer">Gates College <span>·</span> Student Services</footer>
+</body>
+</html>
