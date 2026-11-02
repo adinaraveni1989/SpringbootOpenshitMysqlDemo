@@ -135,7 +135,8 @@ class StudentControllerTests {
 				.andExpect(jsonPath("$.name", is("Ada")))
 				.andExpect(jsonPath("$.address", is("London")))
 				.andExpect(jsonPath("$.age", is(25)))
-				.andExpect(jsonPath("$.college.name", is("Example College")));
+				.andExpect(jsonPath("$.college.name", is("Example College")))
+				.andExpect(jsonPath("$.college.students").doesNotExist());
 	}
 
 	@Test
@@ -163,7 +164,8 @@ class StudentControllerTests {
 				.andExpect(jsonPath("$.name", is("Ada Lovelace")))
 				.andExpect(jsonPath("$.address", is("London")))
 				.andExpect(jsonPath("$.age", is(19)))
-				.andExpect(jsonPath("$.college.name", is("Example College")));
+				.andExpect(jsonPath("$.college.name", is("Example College")))
+				.andExpect(jsonPath("$.college.students").doesNotExist());
 	}
 
 	@Test

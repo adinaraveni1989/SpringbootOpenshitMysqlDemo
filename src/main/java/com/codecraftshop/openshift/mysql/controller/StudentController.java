@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.codecraftshop.openshift.mysql.controller.dto.StudentResponse;
 import com.codecraftshop.openshift.mysql.model.College;
 import com.codecraftshop.openshift.mysql.model.Student;
 import com.codecraftshop.openshift.mysql.repository.CollegeRepository;
@@ -71,17 +72,17 @@ public class StudentController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Student> getStudentById(@PathVariable Long id) {
+	public ResponseEntity<StudentResponse> getStudentById(@PathVariable Long id) {
 		LOGGER.info("Fetching student with id {}", id);
 		Optional<Student> student = studentRepository.findById(id);
 		LOGGER.debug("Student with id {} {}", id, student.isPresent() ? "was found" : "was not found");
-		return student.map(ResponseEntity::ok)
+		return student.map(found -> ResponseEntity.ok(new StudentResponse(found)))
 				.orElseGet(() -> ResponseEntity.notFound().build());
 	}
 
 	@PutMapping("/{id}")
 	@Transactional
-	public ResponseEntity<Student> updateStudent(@PathVariable Long id, @RequestBody Student student) {
+	public ResponseEntity<StudentResponse> updateStudent(@PathVariable Long id, @RequestBody Student student) {
 		LOGGER.info("Updating student with id {}", id);
 		if (!studentRepository.existsById(id)) {
 			LOGGER.debug("Student with id {} was not found for update", id);
@@ -107,7 +108,7 @@ public class StudentController {
 		student.setCollege(college.get());
 		Student updatedStudent = studentRepository.save(student);
 		LOGGER.debug("Updated student with id {}", id);
-		return ResponseEntity.ok(updatedStudent);
+		return ResponseEntity.ok(new StudentResponse(updatedStudent));
 	}
 
 	private Optional<College> findOrCreateCollege(College college) {
