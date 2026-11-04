@@ -40,6 +40,53 @@
 
     if (page === "home") {
         const result = document.getElementById("student-result");
+        const assistantForm = document.getElementById("assistant-form");
+        const assistantMessages = document.getElementById("assistant-messages");
+        const assistantStatus = document.getElementById("assistant-status");
+        const assistantSubmit = document.getElementById("assistant-submit");
+
+        assistantForm.addEventListener("submit", async function (event) {
+            event.preventDefault();
+            const message = new FormData(assistantForm).get("message").trim();
+            if (!message) {
+                return;
+            }
+
+            const question = document.createElement("p");
+            question.className = "assistant-message user-message";
+            question.textContent = message;
+            assistantMessages.appendChild(question);
+            assistantForm.reset();
+            assistantSubmit.disabled = true;
+            assistantStatus.className = "assistant-status";
+            assistantStatus.textContent = "The assistant is thinking…";
+            assistantStatus.hidden = false;
+
+            try {
+                const response = await fetch("/api/assistant/chat", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ message: message })
+                });
+                if (!response.ok) {
+                    const errorBody = await response.json().catch(function () { return {}; });
+                    throw new Error(errorBody.message || "Assistant unavailable (HTTP " + response.status + ").");
+                }
+                const reply = await response.json();
+                const answer = document.createElement("p");
+                answer.className = "assistant-message assistant-answer";
+                answer.textContent = reply.reply;
+                assistantMessages.appendChild(answer);
+                assistantStatus.hidden = true;
+            } catch (error) {
+                assistantStatus.textContent = error.message;
+                assistantStatus.className = "assistant-status error";
+            } finally {
+                assistantSubmit.disabled = false;
+                assistantMessages.scrollTop = assistantMessages.scrollHeight;
+            }
+        });
+
         document.getElementById("fetch-form").addEventListener("submit", async function (event) {
             event.preventDefault();
             const id = new FormData(event.currentTarget).get("id");

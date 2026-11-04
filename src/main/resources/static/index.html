@@ -47,6 +47,28 @@
         </article>
     </section>
     <section id="student-result" class="result-panel" aria-live="polite" hidden></section>
+    <section class="assistant-panel" aria-labelledby="assistant-title">
+        <div class="assistant-heading">
+            <div>
+                <p class="eyebrow">PORTAL HELP</p>
+                <h2 id="assistant-title">Ask the assistant</h2>
+            </div>
+            <span class="assistant-badge">AI ASSISTANT</span>
+        </div>
+        <p class="assistant-notice">Ask how to use the portal. Each question is handled independently. Do not enter
+            student records or sensitive information. Your message is sent to OpenAI for a reply.</p>
+        <div id="assistant-messages" class="assistant-messages" aria-live="polite" aria-label="Assistant conversation">
+            <p class="assistant-welcome">I can help explain how to create, find, or update records in this portal.
+                I cannot access student records.</p>
+        </div>
+        <form id="assistant-form" class="assistant-form">
+            <label class="sr-only" for="assistant-question">Your question</label>
+            <textarea id="assistant-question" name="message" maxlength="1000" rows="2"
+                      placeholder="How do I find a student?" required></textarea>
+            <button id="assistant-submit" class="button button-secondary" type="submit">Ask</button>
+        </form>
+        <p id="assistant-status" class="assistant-status" role="status" hidden></p>
+    </section>
 </main>
 <footer class="site-footer">Gates College <span>·</span> Student Services</footer>
 </body>
